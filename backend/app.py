@@ -583,6 +583,20 @@ def _build_shap(explanation: list, probability: float) -> list:
 
 # ── API Routes ─────────────────────────────────────────────────────────────────
 
+@app.route('/')
+def home():
+    return jsonify({
+        'message': '🚀 PhishGuard AI Backend Running Successfully',
+        'status': 'online',
+        'available_endpoints': [
+            '/predict',
+            '/health',
+            '/stats',
+            '/whitelist'
+        ]
+    })
+
+    
 @app.route('/health', methods=['GET'])
 def health():
     return jsonify({
