@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Intelligent Phishing URL Detection System powered by Stacked Ensemble Learning with SHAP-based explainability for real-time zero-day phishing protection." />
+  <title>PhishGuard AI – Phishing URL Detection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Particle Background Canvas -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- ─── Navigation ─────────────────────────────────────── -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 3L32 9v10c0 8-6 14-14 16C6 33 0 27 0 19V9L18 3z" fill="url(#logoGrad)"/>
+            <path d="M12 18l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="logoGrad" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#6366f1"/>
+                <stop offset="1" stop-color="#22d3ee"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="logo-text">PhishGuard <span class="logo-ai">AI</span></span>
+      </div>
+
+      <div class="nav-links">
+        <a href="#hero" class="nav-link active" id="nav-home">Home</a>
+        <a href="#features" class="nav-link" id="nav-features">Features</a>
+        <a href="#analyzer" class="nav-link" id="nav-analyzer">Analyzer</a>
+        <a href="#history" class="nav-link" id="nav-history">History</a>
+        <a href="#about" class="nav-link" id="nav-about">About</a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile drawer -->
+  <div class="mobile-drawer" id="mobileDrawer">
+    <a href="#hero"      class="mob-link" id="mob-home">Home</a>
+    <a href="#features"  class="mob-link" id="mob-features">Features</a>
+    <a href="#analyzer"  class="mob-link" id="mob-analyzer">Analyzer</a>
+    <a href="#history"   class="mob-link" id="mob-history">History</a>
+    <a href="#about"     class="mob-link" id="mob-about">About</a>
+  </div>
+
+  <!-- ─── Hero ──────────────────────────────────────────── -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Powered by Stacked Ensemble ML · SHAP Explainability
+      </div>
+      <h1 class="hero-title">
+        Detect <span class="gradient-text">Phishing URLs</span><br/>
+        Instantly & Intelligently
+      </h1>
+      <p class="hero-sub">
+        Real-time zero-day phishing detection using Random Forest, Gradient Boosting &amp; XGBoost
+        with transparent SHAP-driven explanations. Built for security professionals.
+      </p>
+
+      <div class="hero-cta-row">
+        <a href="#analyzer" class="btn-primary" id="hero-cta-analyze">
+          <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.8"/><path d="M10 6v4l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Analyze URL Now
+        </a>
+        <a href="#features" class="btn-ghost" id="hero-cta-learn">Learn More ↓</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-card">
+          <span class="stat-value" id="stat-accuracy">98.7%</span>
+          <span class="stat-label">Detection Accuracy</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-card">
+          <span class="stat-value" id="stat-fp">0.3%</span>
+          <span class="stat-label">False Positive Rate</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-card">
+          <span class="stat-value" id="stat-features">42+</span>
+          <span class="stat-label">URL Features</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-card">
+          <span class="stat-value" id="stat-models">3</span>
+          <span class="stat-label">Base Learners</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="shield-wrapper">
+        <div class="shield-outer-ring"></div>
+        <div class="shield-inner-ring"></div>
+        <div class="shield-core">
+          <svg class="shield-svg" viewBox="0 0 120 120" fill="none">
+            <path d="M60 5L110 25v35c0 28-20 48-50 55C30 108 10 88 10 60V25L60 5z" fill="url(#shieldGrad)" opacity="0.9"/>
+            <path d="M40 62l14 14 26-26" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="shieldGrad" x1="10" y1="5" x2="110" y2="115" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#6366f1"/>
+                <stop offset="0.5" stop-color="#8b5cf6"/>
+                <stop offset="1" stop-color="#22d3ee"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="shield-scan-line"></div>
+        </div>
+
+        <div class="orbit-item orbit-1">
+          <div class="orbit-icon">🔍</div>
+        </div>
+        <div class="orbit-item orbit-2">
+          <div class="orbit-icon">🧠</div>
+        </div>
+        <div class="orbit-item orbit-3">
+          <div class="orbit-icon">📊</div>
+        </div>
+        <div class="orbit-item orbit-4">
+          <div class="orbit-icon">🔗</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Features ──────────────────────────────────────── -->
+  <section class="section features-section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Capabilities</span>
+        <h2 class="section-title">Why PhishGuard AI?</h2>
+        <p class="section-sub">A multi-layered defense system combining the best of machine learning with interpretable AI</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card" data-delay="0">
+          <div class="feature-icon-wrap fc-purple">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l9 4.5v5c0 5-3.6 8.9-9 10C6.6 21.4 3 17.5 3 12.5V7.5L12 3z" stroke="currentColor" stroke-width="1.8"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="feature-title">Stacked Ensemble Model</h3>
+          <p class="feature-desc">Three powerful base learners (RF, GBM, XGBoost) combined via a meta-classifier for superior phishing detection beyond what any single model can achieve.</p>
+          <div class="feature-tags">
+            <span class="tag">Random Forest</span>
+            <span class="tag">XGBoost</span>
+            <span class="tag">Gradient Boost</span>
+          </div>
+        </div>
+
+        <div class="feature-card" data-delay="100">
+          <div class="feature-icon-wrap fc-cyan">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v6l4 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="feature-title">Temporal Validation</h3>
+          <p class="feature-desc">Model trained on historical data and tested on future zero-day attacks — proving genuine predictive capability rather than overfitting to known patterns.</p>
+          <div class="feature-tags">
+            <span class="tag">Zero-Day</span>
+            <span class="tag">Temporal Split</span>
+          </div>
+        </div>
+
+        <div class="feature-card" data-delay="200">
+          <div class="feature-icon-wrap fc-green">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><path d="M17.5 14v7M14 17.5h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="feature-title">42+ URL Features</h3>
+          <p class="feature-desc">Lexical, statistical &amp; domain-specific analysis: homograph detection, typosquatting scores, URL entropy, subdomain depth, special-char ratios and more.</p>
+          <div class="feature-tags">
+            <span class="tag">Lexical</span>
+            <span class="tag">Entropy</span>
+            <span class="tag">Homograph</span>
+          </div>
+        </div>
+
+        <div class="feature-card" data-delay="300">
+          <div class="feature-icon-wrap fc-orange">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 19l-7-7 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M15 5l7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="feature-title">SHAP Explainability</h3>
+          <p class="feature-desc">Every prediction comes with a SHAP-based breakdown showing exactly which URL features contributed most to the classification — no black-box decisions.</p>
+          <div class="feature-tags">
+            <span class="tag">SHAP Values</span>
+            <span class="tag">Interpretable</span>
+          </div>
+        </div>
+
+        <div class="feature-card" data-delay="400">
+          <div class="feature-icon-wrap fc-red">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="currentColor" stroke-width="1.8"/><path d="M15 9l-6 6M9 9l6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="feature-title">SMOTE Balancing</h3>
+          <p class="feature-desc">Synthetic Minority Over-sampling handles class imbalance in phishing datasets, ensuring the model isn't biased toward legitimate URLs during training.</p>
+          <div class="feature-tags">
+            <span class="tag">SMOTE</span>
+            <span class="tag">Class Balance</span>
+          </div>
+        </div>
+
+        <div class="feature-card" data-delay="500">
+          <div class="feature-icon-wrap fc-blue">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 class="feature-title">Cost-Sensitive Learning</h3>
+          <p class="feature-desc">Asymmetric cost function that heavily penalises false negatives (missed phishing) while keeping false positives low for seamless legitimate browsing.</p>
+          <div class="feature-tags">
+            <span class="tag">Low FPR</span>
+            <span class="tag">Cost Matrix</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── URL Analyzer ──────────────────────────────────── -->
+  <section class="section analyzer-section" id="analyzer">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Live Analysis</span>
+        <h2 class="section-title">Analyze a URL</h2>
+        <p class="section-sub">Paste any URL below to get an instant phishing verdict with feature-level SHAP explanations</p>
+      </div>
+
+      <!-- Input Card -->
+      <div class="analyzer-card" id="analyzerCard">
+        <div class="url-input-wrapper">
+          <div class="url-input-icon">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <input
+            type="url"
+            id="urlInput"
+            class="url-input"
+            placeholder="Enter URL to analyze, e.g. https://example.com/login"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button class="clear-btn" id="clearBtn" title="Clear input" style="display:none">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+
+        <div class="action-row">
+          <div class="example-urls-label">Try an example:</div>
+          <div class="example-pills" id="examplePills">
+            <button class="pill" data-url="https://google.com" id="ex-google">google.com</button>
+            <button class="pill" data-url="http://paypa1-secure-login.xyz/verify" id="ex-phish1">paypa1-secure.xyz</button>
+            <button class="pill" data-url="https://github.com/login" id="ex-github">github.com</button>
+            <button class="pill" data-url="http://amazon-account-verify.ru/update" id="ex-phish2">amazon-verify.ru</button>
+          </div>
+
+          <button class="btn-analyze" id="analyzeBtn" disabled>
+            <span class="btn-text">
+              <svg viewBox="0 0 20 20" fill="none"><path d="M17 17l-4.35-4.35M11 13A6 6 0 105 7a6 6 0 006 6z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              Analyze
+            </span>
+            <span class="btn-loading" style="display:none">
+              <span class="spin-ring"></span>
+              Scanning…
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Scanning Animation -->
+      <div class="scan-overlay" id="scanOverlay" style="display:none">
+        <div class="scan-card">
+          <div class="scan-shield">
+            <div class="scan-pulse"></div>
+            <svg viewBox="0 0 80 80" fill="none">
+              <path d="M40 4L74 18v22c0 18-12 32-34 38C18 72 6 58 6 40V18L40 4z" fill="url(#scanGrad)" opacity="0.85"/>
+              <defs>
+                <linearGradient id="scanGrad" x1="6" y1="4" x2="74" y2="82" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#6366f1"/>
+                  <stop offset="1" stop-color="#22d3ee"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="scan-line-anim"></div>
+          </div>
+          <p class="scan-title">Analyzing URL…</p>
+          <div class="scan-steps" id="scanSteps">
+            <div class="scan-step active" id="step-extract">
+              <span class="step-dot"></span>Extracting 42+ features
+            </div>
+            <div class="scan-step" id="step-predict">
+              <span class="step-dot"></span>Running ensemble models
+            </div>
+            <div class="scan-step" id="step-shap">
+              <span class="step-dot"></span>Computing SHAP values
+            </div>
+            <div class="scan-step" id="step-done">
+              <span class="step-dot"></span>Preparing explanation
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Section -->
+      <div class="result-section" id="resultSection" style="display:none">
+
+        <!-- Verdict Banner -->
+        <div class="verdict-banner" id="verdictBanner">
+          <div class="verdict-icon-wrap" id="verdictIconWrap">
+            <div class="verdict-icon" id="verdictIcon"></div>
+          </div>
+          <div class="verdict-info">
+            <h2 class="verdict-label" id="verdictLabel">–</h2>
+            <p class="verdict-url" id="verdictUrl"></p>
+          </div>
+          <div class="verdict-confidence">
+            <div class="conf-circle-wrap">
+              <svg class="conf-svg" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="50" class="conf-track"/>
+                <circle cx="60" cy="60" r="50" class="conf-fill" id="confCircle"/>
+              </svg>
+              <div class="conf-text">
+                <span class="conf-value" id="confValue">–</span>
+                <span class="conf-sub" title="Phishing probability: Low % = Safe, High % = Risky">Phishing Risk</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="result-tabs">
+          <button class="tab-btn active" id="tab-shap" data-tab="shap">SHAP Explanation</button>
+          <button class="tab-btn" id="tab-features" data-tab="features">Feature Analysis</button>
+          <button class="tab-btn" id="tab-models" data-tab="models">Model Breakdown</button>
+          <button class="tab-btn" id="tab-risk" data-tab="risk">Risk Report</button>
+        </div>
+
+        <!-- Tab: SHAP Explanation -->
+        <div class="tab-panel active" id="panel-shap">
+          <div class="panel-header">
+            <h3>SHAP Feature Contributions</h3>
+            <p class="panel-sub">Positive values (red) push toward phishing; negative values (blue) push toward legitimate</p>
+          </div>
+          <div class="shap-chart-container">
+            <canvas id="shapChart" height="300"></canvas>
+          </div>
+          <div class="shap-legend">
+            <span class="legend-item"><span class="legend-dot phishing"></span>Increases phishing risk</span>
+            <span class="legend-item"><span class="legend-dot legit"></span>Decreases phishing risk</span>
+          </div>
+        </div>
+
+        <!-- Tab: Feature Analysis -->
+        <div class="tab-panel" id="panel-features">
+          <div class="panel-header">
+            <h3>Extracted URL Features</h3>
+            <p class="panel-sub">All features extracted and used for prediction</p>
+          </div>
+          <div class="feature-table-wrapper">
+            <table class="feature-table" id="featureTable">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Value</th>
+                  <th>Risk Level</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody id="featureTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab: Model Breakdown -->
+        <div class="tab-panel" id="panel-models">
+          <div class="panel-header">
+            <h3>Individual Model Predictions</h3>
+            <p class="panel-sub">Base learner probabilities before meta-classifier combination</p>
+          </div>
+          <div class="models-grid" id="modelsGrid">
+            <!-- Populated by JS -->
+          </div>
+          <div class="meta-explanation">
+            <div class="meta-icon">🧠</div>
+            <p>The <strong>meta-classifier</strong> combines these predictions with URL-specific weights to produce the final verdict. Ensemble learning consistently outperforms individual models on zero-day phishing detection.</p>
+          </div>
+        </div>
+
+        <!-- Tab: Risk Report -->
+        <div class="tab-panel" id="panel-risk">
+          <div class="panel-header">
+            <h3>Comprehensive Risk Report</h3>
+            <p class="panel-sub">Detailed security assessment of the analyzed URL</p>
+          </div>
+          <div class="risk-report" id="riskReport">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button class="btn-ghost-sm" id="analyzeAnotherBtn">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h12M4 10l3-3M4 10l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Analyze Another
+          </button>
+          <button class="btn-ghost-sm" id="copyReportBtn">
+            <svg viewBox="0 0 20 20" fill="none"><rect x="7" y="7" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.8"/><path d="M13 7V5a1 1 0 00-1-1H4a1 1 0 00-1 1v11a1 1 0 001 1h2" stroke="currentColor" stroke-width="1.8"/></svg>
+            Copy Report
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── History ───────────────────────────────────────── -->
+  <section class="section history-section" id="history">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Session Log</span>
+        <h2 class="section-title">Analysis History</h2>
+        <p class="section-sub">URLs analyzed in this session</p>
+      </div>
+
+      <div class="history-toolbar">
+        <div class="history-filter-row">
+          <button class="filter-btn active" data-filter="all" id="filter-all">All</button>
+          <button class="filter-btn" data-filter="phishing" id="filter-phishing">Phishing</button>
+          <button class="filter-btn" data-filter="legitimate" id="filter-legitimate">Legitimate</button>
+        </div>
+        <button class="btn-ghost-sm" id="clearHistoryBtn">
+          <svg viewBox="0 0 20 20" fill="none"><path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Clear History
+        </button>
+      </div>
+
+      <div class="history-list" id="historyList">
+        <div class="history-empty" id="historyEmpty">
+          <svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="28" stroke="#334155" stroke-width="2"/><path d="M22 42l10-20 10 20M26 36h12" stroke="#475569" stroke-width="2" stroke-linecap="round"/></svg>
+          <p>No URLs analyzed yet. Start by entering a URL above.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── About / Architecture ──────────────────────────── -->
+  <section class="section about-section" id="about">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Architecture</span>
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-sub">End-to-end pipeline from URL input to explainable prediction</p>
+      </div>
+
+      <div class="arch-flow">
+        <div class="arch-step" data-step="1">
+          <div class="arch-icon">🌐</div>
+          <div class="arch-content">
+            <h4>URL Input</h4>
+            <p>User submits a URL via the web interface</p>
+          </div>
+          <div class="arch-arrow">→</div>
+        </div>
+        <div class="arch-step" data-step="2">
+          <div class="arch-icon">🔬</div>
+          <div class="arch-content">
+            <h4>Feature Extraction</h4>
+            <p>42+ lexical, statistical &amp; domain features extracted</p>
+          </div>
+          <div class="arch-arrow">→</div>
+        </div>
+        <div class="arch-step" data-step="3">
+          <div class="arch-icon">🤖</div>
+          <div class="arch-content">
+            <h4>Ensemble Prediction</h4>
+            <p>RF + GBM + XGBoost → meta-classifier</p>
+          </div>
+          <div class="arch-arrow">→</div>
+        </div>
+        <div class="arch-step" data-step="4">
+          <div class="arch-icon">💡</div>
+          <div class="arch-content">
+            <h4>SHAP Explanation</h4>
+            <p>Feature contributions computed per prediction</p>
+          </div>
+          <div class="arch-arrow">→</div>
+        </div>
+        <div class="arch-step" data-step="5">
+          <div class="arch-icon">📋</div>
+          <div class="arch-content">
+            <h4>Result + Report</h4>
+            <p>Verdict, confidence score &amp; full feature breakdown</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tech-stack-section">
+        <h3 class="tech-title">Technology Stack</h3>
+        <div class="tech-grid">
+          <div class="tech-group">
+            <div class="tech-group-label">Backend</div>
+            <div class="tech-items">
+              <span class="tech-badge py">Python</span>
+              <span class="tech-badge sk">scikit-learn</span>
+              <span class="tech-badge xg">XGBoost</span>
+              <span class="tech-badge fl">Flask</span>
+              <span class="tech-badge sh">SHAP</span>
+              <span class="tech-badge sm">SMOTE</span>
+              <span class="tech-badge pd">Pandas</span>
+              <span class="tech-badge np">NumPy</span>
+            </div>
+          </div>
+          <div class="tech-group">
+            <div class="tech-group-label">Frontend</div>
+            <div class="tech-items">
+              <span class="tech-badge h5">HTML5</span>
+              <span class="tech-badge c3">CSS3</span>
+              <span class="tech-badge js">JavaScript</span>
+              <span class="tech-badge ch">Chart.js</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="credit-card">
+        <div class="credit-badge">Project</div>
+        <p class="credit-text"><strong>PhishGuard AI</strong> — Intelligent Phishing URL Detection using Stacked Ensemble Learning</p>
+        <p class="credit-author">· Temporal Validation · SHAP Explainability · Cost-Sensitive Learning</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <svg viewBox="0 0 28 28" fill="none"><path d="M14 2L26 7v8c0 6-4.5 10.5-12 12C6.5 25.5 2 21 2 15V7L14 2z" fill="url(#footGrad)"/><path d="M9 14l3.5 3.5L19 11" stroke="#fff" stroke-width="2" stroke-linecap="round"/><defs><linearGradient id="footGrad" x1="2" y1="2" x2="26" y2="28" gradientUnits="userSpaceOnUse"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs></svg>
+        <span>PhishGuard AI</span>
+      </div>
+      <p class="footer-copy">© 2026 PhishGuard AI </p>
+      <div class="footer-links">
+        <a href="#hero" class="footer-link">Home</a>
+        <a href="#analyzer" class="footer-link">Analyzer</a>
+        <a href="#about" class="footer-link">About</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="api-adapter.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

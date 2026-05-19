@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "PhishGuard AI Link Scanner",
+  "version": "1.0",
+  "description": "Scans all links on a webpage and checks them for phishing using the PhishGuard AI backend API.",
+  "permissions": ["scripting", "activeTab"],
+  "host_permissions": ["<all_urls>", "http://localhost:5000/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  }
+}
