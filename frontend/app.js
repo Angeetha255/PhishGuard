@@ -7,6 +7,7 @@
 // ── Config ──────────────────────────────────────────────
 const CONFIG = {
   apiBase: 'http://localhost:5000',
+  apiBase: 'https://phishguard-1-fgkq.onrender.com',
   apiTimeout: 15000,
   debounceMs: 200,
 };
